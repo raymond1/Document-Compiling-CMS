@@ -1,4 +1,5 @@
 <?php
+
 /*
 Debugging function
 */
@@ -161,6 +162,7 @@ function replace_one_magic($string, $replacement){
 
 function template($contents, $title = 'Cantonese Central'){
 	$template = file_get_contents($GLOBALS['source directory'] . "/" . 'template.container');
+
 	$after_title_replacement = replace_one_magic($template, $title);
 	$after_contents_replacement = replace_one_magic($after_title_replacement, $contents);
 	
@@ -568,8 +570,11 @@ function generate_washroom_html(){
 //Takes in a file
 //source_path destination_path
 //source_path2 destination_path2
-function copy_assets($copy_instructions_file){
-  $lines = explode(PHP_EOL, file_get_contents($copy_instructions_file));
+function copy_files($copy_instructions_filename = null){
+  if (empty($copy_instructions_filename)){
+    $copy_instructions_filename = $GLOBALS['copy instructions file'];
+  }
+  $lines = explode(PHP_EOL, file_get_contents($copy_instructions_filename));
   foreach ($lines as $line){
     $source = $GLOBALS['source directory'] . "/" . $line;
     $destination = $GLOBALS['output directory'] . "/" . $line;
@@ -579,7 +584,8 @@ function copy_assets($copy_instructions_file){
       exec("cp -R $source $destination");
     }else{
       //Otherwise, if it is a directory, copy it if it is new
-      //Copy the contents in if the directory is not new
+      //Copy the contents in it if the directory is not new
+      //Copying is done recursively.
       if (!file_exists($destination)){
         exec("cp -R $source $destination");
       }
@@ -622,18 +628,70 @@ function generate_templated_pages(){
   }
 }
 
-function generate_website(){
-  if (file_exists($GLOBALS['directory structure file'])){
-    generate_directory_structure($GLOBALS['directory structure file']);
+//Opens up the src/directories.txt file and generates the directories listed in that file.
+//The format of the src/directories.txt file is as follows:
+//Every line contains the name of a directory or a / separated list of directories.
+//For example:
+//
+//cat
+//bat
+//cat/dog
+//cat/dog/fish
+//
+//For each line in the file that contains a list of directories, those directories will be created if they did not previously exist.
+//If the directories already exist, nothing is done.
+function process_directories(){
+  $directories_file = "src/directories.txt";
+  if (file_exists($directories_file)){
+    $contents = file_get_contents($directories_file);
+    $lines = explode("\n", $contents);
+    foreach ($lines as $line){
+      if (!empty($line)){
+        @mkdir($GLOBALS['output directory'] . "/" . $line,0777,true);
+      }
+    }
+  }else{
+    echo("Missing src/directories.txt file.\n");
   }
-
-  if (file_exists($GLOBALS['copy instructions file'])){
-    copy_assets($GLOBALS['copy instructions file']);
-  }
-  
-  generate_index_html();
-  generate_washroom_html();
-  generate_templated_pages();  
 }
 
-generate_website();
+//parses the script.txt file and executes the commands within it
+function follow_script_file(){
+  //hard coded
+  $script_file = "src/script.txt";
+  $script_file_contents = @file_get_contents($script_file);
+  if ($script_file_contents === false){
+    echo("Missing src/script.txt file.\n");
+  }
+
+  //From here on, assume file is present
+  $lines = explode("\n", $script_file_contents);
+
+  foreach($lines as $line){
+    if ($line == 'generate directories'){
+      echo ("Generating directories.\n");
+      process_directories();
+    }else if ($line == 'copy files'){
+      echo ("Copying files.\n");
+      copy_files();
+    }
+  }
+}
+
+// function generate_website(){
+  // read_script_file();
+  // if (file_exists($GLOBALS['directory structure file'])){
+  //   generate_directory_structure($GLOBALS['directory structure file']);
+  // }
+
+  // if (file_exists($GLOBALS['copy instructions file'])){
+  //   copy_assets($GLOBALS['copy instructions file']);
+  // }
+  
+  // generate_index_html();
+  // generate_washroom_html();
+  // generate_templated_pages();  
+// }
+
+//generate_website();
+follow_script_file();
