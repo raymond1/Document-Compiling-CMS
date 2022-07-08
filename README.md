@@ -92,6 +92,22 @@ Similary, a directory can be copied recursively into the output directory by spe
 
 A template file has the following format:
 
+template.template content_folder/content.content
+template.template content_folder
+
+.content files can contain any text information.
+.template files contain MAGIC sequences.
+
+The first form creates an output 
+
+Inside script.txt:
+template t1.template
+
+Inside t1.template(positional content):
+src/d2/c1.container srd/d1/s1.content
+src/d2/c1.container src/d1/s2.content src/d2.s3.content
+
+
 
 
 

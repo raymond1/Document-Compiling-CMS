@@ -1,2 +1,3 @@
 generate directories
 copy files
+compile src/example.compiled_documents
