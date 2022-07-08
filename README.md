@@ -1,4 +1,4 @@
-# cms
+# Document Compiling CMS
 This is a program that generates a website. It is capable of doing the following things:
 
 1)Generating the directory structure of a website
@@ -88,51 +88,20 @@ The result after processing the copy files directive is that the file snail2.jpg
 
 Similary, a directory can be copied recursively into the output directory by specifying a directory. You can use nested directories such as directory1/directory2/directory3 for this purpose.
 
-## Template directive
+## "compile" directive
 
-A template file has the following format:
+Often, websites have repeating sections containing parts that are different. The Document Compiling CMS handles repeating sections by using three types of files:
 
-template.template content_folder/content.content
-template.template content_folder
+1).cdf files
+2).template files
+3).content files
 
-.content files can contain any text information.
-.template files contain MAGIC sequences.
+A .cdf file is specified in the script.txt file and cnotains information as to which pieces of content go into which template files. Each line in a .cdf file generates one output file. The syntax for a line of the .cdf file is as follows:
 
-The first form creates an output 
+[.template filename] [.content filename1] [.content filename2] [.content filename3] ... [output filename]
 
-Inside script.txt:
-template t1.template
+In other words, each line in a .cdf file consists of a filename followed by any number of .content filenames and ends with an output filename. When a line of the .cdf file is processed, the following things happen:
 
-Inside t1.template(positional content):
-src/d2/c1.container srd/d1/s1.content
-src/d2/c1.container src/d1/s2.content src/d2.s3.content
-
-
-
-
-
-
-When you run the generate_website.php script, the following things happen:
-1)The directory structures indicated in src/directories.txt is generated.
-2)The files and directories indicated in src/copy.txt will copy files from the source to destination. This is done recursively using cp -R.
-3)There is a function, generate_website() which will generate the different pages of the website
-4)Currently, generate_website works as follows:
-  1)Generate the index.html file
-5)Templated files are generated
-  Templating works as follows:  there is a file: template.container in the src directory that is always used. Inside the template.container file, there is a
-  string, MAGIC that can be replaced by content located inside .content files that are also inside the src directory.
-
-Files are placed in the 'output' directory, currently specified by $GLOBALS['output directory'].
-
-To edit the menu, edit the generate_menu function.
-To add a new page,
-
-
-
-Ideally, there should be a generation_sequence.txt file.
-
-template 1.txt
-
-Design:
-1)Read through a script for what generate_website.php should do. Script file is called script.txt and is located in the same directory as generate_website.php.
-2)
+1)The .template filename is opened and read
+2)For each MAGIC string encountered in the .template file, the contents of a .content file replaces it.
+3)An output file corresponding to the last filename listed on the line of a .cdf file is generated containing the contents of the .template file after all the MAGIC constants have been replaced.
