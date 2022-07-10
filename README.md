@@ -52,19 +52,19 @@ In the script file script.txt in the src directory, add a line that contains onl
 
 generate directories
 
-When the php genereate_directories.php command is run, the generate directories directive will do the following:
-1)open and read the file directories.txt. You will need to create this file if it doesn't exist.
+When the php generate_website.php script is run, the generate directories directive will do the following:
+1)open and read the file src/directories.txt. You will need to create this file if it doesn't exist.
 2)generate the directories listed in the directories.php file.
 
 The syntax for specifying the directories to be created is as follows: each line contains a series of directory names separated by slashes. These directories will be created when the "generate directories" directive is processed.
 
 An example directories.txt file might contain the following:
 
-example
-example/images
+output/example
+output/example/images
 example2
 
-This will generate the folders example, add an images subfolder in it and the folder example2. These folders will be relative to the working directory where the command php generate_directories is called.
+This will generate the folders output, containing a subfolder example, containing a subfolder images. It will also generate the folder example2. All folders are relative to the working directory.
 
 If a directory already exists, it will not be recreated. If a directory already exists and is not empty, the directory will not be wiped clean due to the generate directories directive.
 
@@ -76,13 +76,13 @@ In the script file script.txt in the src directory, add a line that contains onl
 
 copy files
 
-When the php generate_directories.php command is run, the copy files directive will copy files from the src directory or subdirectories into the output directory(named "output"). The files that will be selected for the copy operation will come from the contents listed in the src/copy.txt file. You will need to create this file if it doesn't exist.
+When the php generate_directories.php command is run, the copy files directive will copy files or directories from a source location into a destination folder. The files that will be selected for the copy operation will come from the contents listed in the src/copy.txt file. You will need to create this file if it doesn't exist.
 
-For each line in the src/copy.txt file, a copy command will be executed. For each line, a copy command will be executed to copy from a path relative to the "src" directory into the "output" directory. For each line that is a directory, a recursive copy command will be executed to copy all contents of a directory into the output directory. For each line that is a file, only a single file will be copied over.
+For each line in the src/copy.txt file, a copy command will be executed. Both the source and destination specified are relative to the working directory.
 
-For example, to copy the file snail2.jpg from the src directory into the output directory, the following line would need to be added to src/copy.txt:
+For example, to copy the file snail2.jpg from the src directory into a directory named output, the following line would need to be added to src/copy.txt:
 
-snail2.jpg
+src/snail2.jpg output
 
 The result after processing the copy files directive is that the file snail2.jpg located in the src directory would be copied into the output directory.
 
