@@ -1,7 +1,8 @@
 {
 	"name":"raymond1/cms",
-	"description":"A CMS",
+	"description":"Document Compiling CMS",
 	"type":"project",
 	"keywords":["cms"],
-	"homepage":"https://github.com/raymond1/cms"
+	"homepage":"https://github.com/raymond1/cms",
+	"version":"1.0.0"
 }
