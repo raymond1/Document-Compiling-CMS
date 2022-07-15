@@ -1,8 +1,14 @@
 {
-	"name":"raymond1/cms",
-	"description":"Document Compiling CMS",
-	"type":"project",
-	"keywords":["cms"],
-	"homepage":"https://github.com/raymond1/cms",
-	"version":"1.0.0"
+    "name": "raymond/document-compiliing-cms",
+    "description": "A system for collating files and fragments into a webite.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Raymond Leon",
+            "email": "raymondleon@raymondleon.ca"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
 }
