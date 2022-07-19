@@ -1,4 +1,8 @@
 <?php
+//Desired future feature: config file.
+//directories.txt -> src
+//script.txt -> src
+
 
 /*
 Debugging function
@@ -10,7 +14,6 @@ function d_log($s){
 }
 
 //These are essentially hard-coded constants
-$GLOBALS['source directory'] = 'src';
 $GLOBALS['output directory'] = 'output';
 $GLOBALS['copy instructions file'] = $GLOBALS['source directory'] . "/" . 'copy.txt';
 $GLOBALS['directory structure file'] = $GLOBALS['source directory'] . "/" . 'directories.txt';
@@ -47,8 +50,8 @@ function copy_files($copy_instructions_filename = null){
   }
 }
 
-//Opens up the src/directories.txt file and generates the directories listed in that file.
-//The format of the src/directories.txt file is as follows:
+//Opens up the directories.txt file and generates the directories listed in that file.
+//The format of the directories.txt file is as follows:
 //Every line contains the name of a directory or a / separated list of directories.
 //For example:
 //
@@ -60,7 +63,7 @@ function copy_files($copy_instructions_filename = null){
 //For each line in the file that contains a list of directories, those directories will be created if they did not previously exist.
 //If the directories already exist, nothing is done.
 function process_directories(){
-  $directories_file = "src/directories.txt";
+  $directories_file = "directories.txt";
   if (file_exists($directories_file)){
     $contents = file_get_contents($directories_file);
     $lines = explode("\n", $contents);
@@ -70,7 +73,7 @@ function process_directories(){
       }
     }
   }else{
-    echo("Missing src/directories.txt file.\n");
+    echo("Missing directories.txt file.\n");
   }
 }
 
@@ -140,10 +143,10 @@ function process_compiled_documents_file($cdf_filename){
 //parses the script.txt file and executes the commands within it
 function follow_script_file(){
   //hard coded
-  $script_file = "src/script.txt";
+  $script_file = "script.txt";
   $script_file_contents = @file_get_contents($script_file);
   if ($script_file_contents === false){
-    echo("Missing src/script.txt file.\n");
+    echo("Missing script.txt file.\n");
   }
 
   //From here on, assume file is present
