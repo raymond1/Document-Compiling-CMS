@@ -20,6 +20,8 @@ This software is supposed to be installed using composer. To install the softwar
 
 composer require raymond1/document-compiling-cms
 
+3)Optionally, copy the file generate_website.php into the base of the folder where you are going to put the files used to create your website.
+
 # Usage
 This is a console run php script and is activated using the following command:
 
