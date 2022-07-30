@@ -12,6 +12,6 @@
     "minimum-stability": "dev",
     "require": {},
     "scripts":{
-	"post-install": "@php test.php"
+	"post-install-cmd": "@php test.php"
     }
 }
