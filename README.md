@@ -1,4 +1,13 @@
-# Document Compiling CMS
+# Usage
+This is a console run php script and is activated using the following command:
+
+php generate_website.php <optional script_file>
+
+If no script file is specified, it is assumed by default to be "script.txt" from the current directory.
+
+See below for information on how to configure the Document Compiling CMS (abbreviated DCC).
+
+# Capabilities
 This is a program that generates a website. It is capable of doing the following things:
 
 1)Generating the directory structure of a website
@@ -22,16 +31,6 @@ composer require raymond1/document-compiling-cms
 
 3)Copy the file generate_website.php into the base of the folder where you are going to put the files used to create your website.
 
-# Usage
-This is a console run php script and is activated using the following command:
-
-php generate_website.php
-
-By default, nothing happens because the actions that the cms should take have not been specified yet. A file called script.txt needs to be configured with instructions to specify actions that will be taken when the generate_website.php script is run.
-
-By default, the placement of the script.txt file is expected to be the working directory(the directory where the command php generate_website.php was typed in). If the file is not there, you will need to create it.
-
-Further details on how to create the script file can be found later in this read me file.
 
 ## Creating a script file/Script file syntax
 
@@ -173,4 +172,13 @@ These two files were specified in the .cdf file in step 2 as the last argument o
 
 
 ## Development process
-???
+In the document-compiling-cms folder, commit and tag your changes with the newest version.
+git add .
+git commit -m "..."
+git push
+git tag  (to get tag name)
+git tag 1.0.7
+git push origin 1.0.7
+
+In your development/test directory, where the document-compiling-cms was installed with composer, do a composer update.
+copy the 
