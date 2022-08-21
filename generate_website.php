@@ -147,6 +147,7 @@ function follow_script_file(){
   $script_file_contents = @file_get_contents($script_file);
   if ($script_file_contents === false){
     echo("Missing script.txt file.\n");
+    exit;
   }
 
   //From here on, assume file is present

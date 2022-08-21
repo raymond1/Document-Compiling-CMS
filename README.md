@@ -20,7 +20,7 @@ This software is supposed to be installed using composer. To install the softwar
 
 composer require raymond1/document-compiling-cms
 
-3)Optionally, copy the file generate_website.php into the base of the folder where you are going to put the files used to create your website.
+3)Copy the file generate_website.php into the base of the folder where you are going to put the files used to create your website.
 
 # Usage
 This is a console run php script and is activated using the following command:
@@ -93,19 +93,84 @@ The result after processing the copy files directive is that the file snail2.jpg
 Similary, a directory can be copied recursively into the output directory by specifying a directory. You can use nested directories such as directory1/directory2/directory3 for this purpose.
 
 ## "compile" directive
+Overview:
+This feature requires multiple files in order to be specified. The way to understand this feature is to understand the underlying use case it was meant to solve. The idea is that there are many websites that contain repeating sections containing parts within them that are different.
 
-Often, websites have repeating sections containing parts that are different. The Document Compiling CMS handles repeating sections by using three types of files:
+Consider, for example, the following two pages of a fictitious website:
+Page 1:
+<html>
+<title>A website</title>
+<body>
+<h1>Page 1<h1>
+<p>Some content goes here.
+</body>
+</html>
 
-1).cdf files
-2).template files
-3).content files
+Page 2:
 
-A .cdf file is specified in the script.txt file and cnotains information as to which pieces of content go into which template files. Each line in a .cdf file generates one output file. The syntax for a line of the .cdf file is as follows:
+<html>
+<title>A website</title>
+<body>
+<h1>Page 2<h1>
+<p>Some different content for page 2 goes here.
+</body>
+</html>
+
+Note that only the content between the body start and end tags is different. In order to generate this website using the document compiling cms, the following steps need to be taken.
+
+1)In the script.txt file, add a line like the following:
+```
+compile <filename.cdf>
+```
+The syntax is the word "compile" followed by the name of a .cdf file.
+
+2)Generate the cdf file. Inside that file, put in the name of the template file, the name of the content files, and the resultant file after substitution.
+
+For the example above, the file can be:
+```
+template.template page1.content output_directory/page1.html
+template.template page2.content output_directory/page2.html
+```
+
+Explanation:
+
+Each line of a .cdf file generates one output file. The syntax for a line of the .cdf file is as follows:
 
 [.template filename] [.content filename1] [.content filename2] [.content filename3] ... [output filename]
 
 In other words, each line in a .cdf file consists of a filename followed by any number of .content filenames and ends with an output filename. When a line of the .cdf file is processed, the following things happen:
 
-1)The .template filename is opened and read
-2)For each MAGIC string encountered in the .template file, the contents of a .content file replaces it.
+1)The .template filename specified on each line is opened and read
+2)For each MAGIC string encountered in the .template file, the contents of a .content file is substituted for it.
 3)An output file corresponding to the last filename listed on the line of a .cdf file is generated containing the contents of the .template file after all the MAGIC constants have been replaced.
+
+3)Generate all the .template and .content files needed in step 2.
+
+The template.template file will have the following contents for the example:
+
+<html>
+<title>A website</title>
+<body>MAGIC</body>
+</html>
+
+page1.content will have the following contents:
+```
+<h1>Page 1<h1>
+<p>Some content goes here.
+```
+page2.content will have the following contents:
+```
+<h1>Page 2<h1>
+<p>Some different content for page 2 goes here.
+```
+
+4)Run php generate_website.php
+The following files will be generated:
+output_directory/page1.html
+output_directory/page2.html
+
+These two files were specified in the .cdf file in step 2 as the last argument on each line of the file. The contents will be determined by substituting the MAGIC string found in the template.template file with the contents specified by the second argument on each line of the .cdf file.
+
+
+## Development process
+???
