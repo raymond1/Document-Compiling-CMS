@@ -5,7 +5,7 @@ php generate_website.php <optional script_file>
 
 If no script file is specified, it is assumed by default to be "script.txt" from the current directory.
 
-See below for information on how to configure the Document Compiling CMS (abbreviated DCC).
+See below for information on how to configure the Document Compiling CMS (abbreviated DCC), the format of the script file and files needed to control the behaviour of generate_website.php.
 
 # Capabilities
 This is a program that generates a website. It is capable of doing the following things:
@@ -75,7 +75,7 @@ If a directory already exists, it will not be recreated. If a directory already 
 
 Usage:
 
-In the script file script.txt in the src directory, add a line that contains only the following text:
+In the script file, add a line that contains only the following text:
 
 copy files
 
@@ -171,7 +171,14 @@ output_directory/page2.html
 These two files were specified in the .cdf file in step 2 as the last argument on each line of the file. The contents will be determined by substituting the MAGIC string found in the template.template file with the contents specified by the second argument on each line of the .cdf file.
 
 
-## Development process
+## Development process and Makefile
+# Makefile for copying generate_website.php
+Use the Makefile to copy your development generate_website.php into the target directory. 
+
+Usage: make copy
+
+# To bump the version number
+
 In the document-compiling-cms folder, commit and tag your changes with the newest version.
 git add .
 git commit -m "..."
@@ -181,4 +188,7 @@ git tag 1.0.7
 git push origin 1.0.7
 
 In your development/test directory, where the document-compiling-cms was installed with composer, do a composer update.
-copy the 
+
+cp ~/Desktop/cantonese/cantonesecentral.com.v2/vendor/raymond1/document-compiling-cms/generate_website.php ~/Desktop/cantonese/cantonesecentral.com.v2/generate_website.php
+
+
