@@ -1,9 +1,4 @@
 <?php
-//Desired future feature: config file.
-//directories.txt -> src
-//script.txt -> src
-
-
 /*
 Debugging function
 */
@@ -18,7 +13,6 @@ if ($argc == 2) $GLOBALS['script file'] = $argv[1];
 
 $GLOBALS['output directory'] = 'output';
 $GLOBALS['source directory'] = 'src';
-$GLOBALS['copy instructions file'] = $GLOBALS['source directory'] . "/" . 'copy.txt';
 $GLOBALS['directory structure file'] = $GLOBALS['source directory'] . "/" . 'directories.txt';
 
 //Looks for the string 'MAGIC' in $string and replaces the first occurrence
@@ -33,15 +27,13 @@ function replace_one_magic($string, $replacement){
 //source destination
 //source can be a file or a directory
 //destination refers to a directory where source will be copied to
-function copy_files($copy_instructions_filename = null){
-  if (empty($copy_instructions_filename)){
-    $copy_instructions_filename = $GLOBALS['copy instructions file'];
-  }
-
+function copy_files($copy_instructions_filename){
   if (file_exists($copy_instructions_filename)){
     echo ("Copying files.\n");
     $lines = explode(PHP_EOL, file_get_contents($copy_instructions_filename));
     foreach ($lines as $line){
+      if (trim($line)=='') continue;
+
       $parts = explode(" ", $line);
       $source = $parts[0];
       $destination = $parts[1];
@@ -166,6 +158,26 @@ function process_compiled_documents_file($cdf_filename){
   return true;
 }
 
+//Copy directive takes the form:
+//copy, or
+//copy <filename
+function is_copy_directive($s){
+  $tokens = explode(" ", $s);
+
+  if (count($tokens) != 2) return false;
+  if ($tokens[0]!='copy') return false;
+  
+  return true;
+}
+
+function is_command_directive($s){
+  if (substr($s,0,strlen("command ")) == "command "){
+    return true;
+  }
+
+  return false;
+}
+
 //parses the script.txt file and executes the commands within it
 function follow_script_file(){
   $script_file_contents = @file_get_contents($GLOBALS['script file']);
@@ -185,8 +197,10 @@ function follow_script_file(){
     else if ($line == 'generate directories'){
       echo ("Generating directories.\n");
       process_directories();
-    }else if ($line == 'copy files'){
-      copy_files();
+    }else if (is_copy_directive($line)){
+      echo ("Processing copy files directive\n");
+      $tokens = explode(" ", $line);
+      copy_files($tokens[1]);
     }else if (is_compile_directive($line)){
       echo ("Compiling documents:");
       try{
@@ -202,6 +216,10 @@ function follow_script_file(){
       catch(Exception $e){
         echo ("Error processing compiled documents file.");
       }
+    }else if (is_command_directive($line)){
+      $command = substr($line,strlen("command "));
+      echo ("Running command: $command\n");
+      exec($command);
     }
     else{
       echo ("Syntax error in script.txt around line $i at the part that says '$line'\n");
