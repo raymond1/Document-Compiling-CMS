@@ -123,11 +123,11 @@ Note that only the content between the body start and end tags is different. In 
 ```
 compile <filename.cdf>
 ```
-The syntax is the word "compile" followed by the name of a .cdf file.
+The syntax is the word "compile" followed by the name of a .cdf file. For the purposes of this mini tutorial, assume the name fo the cdf file is "filename.cdf".
 
-2)Generate the cdf file. Inside that file, put in the name of the template file, the name of the content files, and the resultant file after substitution.
+2)Generate the filename.cdf file. Inside that file, put on one line the name of the template file, the name of the content files, and the resultant file after substitution, all separated by spaces. Make sure your file names don't have spaces.
 
-For the example above, the file can be:
+For the current mini tutorial, the contents of filename.cdf can  be:
 ```
 template.template page1.content output_directory/page1.html
 template.template page2.content output_directory/page2.html
@@ -137,7 +137,7 @@ Explanation:
 
 Each line of a .cdf file generates one output file. The syntax for a line of the .cdf file is as follows:
 
-[.template filename] [.content filename1] [.content filename2] [.content filename3] ... [output filename]
+<.template filename> <one or more .content filenames> <output filename>
 
 In other words, each line in a .cdf file consists of a filename followed by any number of .content filenames and ends with an output filename. When a line of the .cdf file is processed, the following things happen:
 
