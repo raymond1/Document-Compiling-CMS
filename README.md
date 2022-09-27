@@ -97,6 +97,7 @@ This feature requires multiple files in order to be specified. The way to unders
 
 Consider, for example, the following two pages of a fictitious website:
 Page 1:
+```
 <html>
 <title>A website</title>
 <body>
@@ -104,9 +105,10 @@ Page 1:
 <p>Some content goes here.
 </body>
 </html>
+```
 
 Page 2:
-
+```
 <html>
 <title>A website</title>
 <body>
@@ -114,7 +116,7 @@ Page 2:
 <p>Some different content for page 2 goes here.
 </body>
 </html>
-
+```
 Note that only the content between the body start and end tags is different. In order to generate this website using the document compiling cms, the following steps need to be taken.
 
 1)In the script.txt file, add a line like the following:
