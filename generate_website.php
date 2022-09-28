@@ -46,6 +46,8 @@ function copy_files($copy_instructions_filename){
       }
       exec("cp -R $source $destination");
     }  
+  }else{
+    echo "Copyscript not found: $copy_instructions_filename\n";
   }
 }
 
@@ -158,14 +160,12 @@ function process_compiled_documents_file($cdf_filename){
   return true;
 }
 
-//Copy directive takes the form:
-//copy, or
-//copy <filename
-function is_copy_directive($s){
+//copyscript <filename>
+function is_copyscript_directive($s){
   $tokens = explode(" ", $s);
 
   if (count($tokens) != 2) return false;
-  if ($tokens[0]!='copy') return false;
+  if ($tokens[0]!='copyscript') return false;
   
   return true;
 }
@@ -197,8 +197,8 @@ function follow_script_file(){
     else if ($line == 'generate directories'){
       echo ("Generating directories.\n");
       process_directories();
-    }else if (is_copy_directive($line)){
-      echo ("Processing copy files directive\n");
+    }else if (is_copyscript_directive($line)){
+      echo ("Processing copyscript directive\n");
       $tokens = explode(" ", $line);
       copy_files($tokens[1]);
     }else if (is_compile_directive($line)){

@@ -69,8 +69,6 @@ example2
 
 This will generate the folders output, containing a subfolder example, containing a subfolder images. It will also generate the folder example2. All folders are relative to the working directory.
 
-If a directory already exists, it will not be recreated. If a directory already exists and is not empty, the directory will not be wiped clean due to the generate directories directive.
-
 ## "copy files" directive
 
 Usage:
