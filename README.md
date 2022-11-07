@@ -38,12 +38,12 @@ Add the file script.txt needs to be placed in the working directory. It contains
 
 Example file:
 generate directories
-copy files
+copyscript copy.txt
 
 Explanation:
 The format of the script.txt file consists of lines of instructions, with one instruction per line. Each line contains what are called "directives", which are key words or phrases that have special meaning for the CMS.
 
-"generate directories" and "copy files" in the above example file are known as directives. The complete list of available directives and their usage are indicated below.
+"generate directories" and "copyscript" in the above example file are known as directives. The complete list of available directives and their usage are indicated below.
 
 ## Script file directives
 
@@ -69,23 +69,29 @@ example2
 
 This will generate the folders output, containing a subfolder example, containing a subfolder images. It will also generate the folder example2. All folders are relative to the working directory.
 
-## "copy files" directive
+## "copyscript" directive
 
 Usage:
 
-In the script file, add a line that contains only the following text:
+In the script file, add a line that contains a line containing two tokens. The first token is string "copyscript". The second token is a filepath pointing to a file that contains a list of what files to copy over.
 
-copy files
+For example:
 
-When the php generate_directories.php command is run, the copy files directive will copy files or directories from a source location into a destination folder. The files that will be selected for the copy operation will come from the contents listed in the copy.txt file. You will need to create this file if it doesn't exist. By default, the working directory is searched for the copy.txt file.
+```
+copyscript copy.txt
+```
 
-For each line in the copy.txt file, a copy command will be executed. Both the source and destination specified are relative to the working directory.
+will tell the DCC to copy all the files indicated in the file copy.txt file when the php generate_directories.php command is run.
+
+The format for the copy.txt file is a two-column file where the two columns are separated by a space. The left column will be a source file. The right column will be the destination file or folder name.
+
+Both the source and destination specified are relative to the working directory.
 
 For example, to copy the file snail2.jpg from the src directory into a directory named output, the following line would need to be added to copy.txt:
 
 snail2.jpg output
 
-The result after processing the copy files directive is that the file snail2.jpg located in the src directory would be copied into the output directory.
+The result after processing the ```copyscript copy.txt``` command from above is that the file snail2.jpg located in the src directory would be copied into the output directory.
 
 Similary, a directory can be copied recursively into the output directory by specifying a directory. You can use nested directories such as directory1/directory2/directory3 for this purpose.
 
