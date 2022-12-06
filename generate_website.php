@@ -225,11 +225,14 @@ function processTemplate($template, $outputFilename){
     }else{
       //Read until directive start
       $templateStringProcessed .= substr($templateContents,$caret, $directiveInformation->start);
-      $outputString .= $templateStringProcessed;
+      $outputString .= substr($templateStringProcessed,0, -2);
 
       $stuffBetweenDirectives = substr($templateContents,$caret + $directiveInformation->start, $directiveInformation->length);
       $templateStringProcessed .= $stuffBetweenDirectives;
       $outputString .= processTemplateDirective($stuffBetweenDirectives);
+
+      //Skip the end tag
+      $templateStringProcessed .= substr($templateContents, $caret + $directiveInformation->start + $directiveInformation->length, 2);
     }
 
     $caret += strlen($templateStringProcessed);
