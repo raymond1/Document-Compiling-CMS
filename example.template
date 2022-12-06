@@ -3,7 +3,7 @@
 <head>
 <title><%
 copy
- src/example.content
+ example.content
 %></title>
 </head>
 <body>

@@ -169,7 +169,7 @@ function processTemplateDirective($s){
           $outputString .= file_get_contents($filename);
         }
         else{
-          echo "Could not find $filename while processing". $directive . "directive.\n";
+          echo "Could not find $filename while processing the ". $directive . " directive.\n";
           exit;
         }
       }
