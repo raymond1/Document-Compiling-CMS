@@ -1,1 +1,0 @@
-src/example.template src/example.content output/example.html

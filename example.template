@@ -1,7 +1,10 @@
 <!doctype html>
 <html lang=en>
 <head>
-<title>MAGIC</title>
+<title><%
+copy
+ src/example.content
+%></title>
 </head>
 <body>
 </body>
