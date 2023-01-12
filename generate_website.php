@@ -162,7 +162,7 @@ function processTemplateDirective($s){
   $directive = $parts[0];
   $outputString = '';
   switch ($directive){
-    case 'copy':
+    case 'transcribe':
       for ($i = 1; $i < count($parts); $i++){
         $filename = trim($parts[$i]);
         if (file_exists($filename)){
