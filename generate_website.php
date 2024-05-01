@@ -27,6 +27,7 @@ function replace_one_magic($string, $replacement){
 
 //Syntax of copy.txt file is:
 //source destination
+
 //source can be a file or a directory
 //destination refers to a directory where source will be copied to
 function copy_files($copy_instructions_filename){
@@ -238,6 +239,9 @@ function processTemplate($template, $outputFilename){
     $caret += strlen($templateStringProcessed);
   }
 
+  $directory = dirname($outputFilename);
+
+  if (!file_exists($directory)) mkdir($directory);
   $outputFile = fopen($outputFilename, "w+");
   fwrite($outputFile, $outputString);
   fclose($outputFile);

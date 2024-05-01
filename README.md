@@ -96,6 +96,8 @@ The result after processing the ```copyscript copy.txt``` command from above is 
 Similary, a directory can be copied recursively into the output directory by specifying a directory. You can use nested directories such as directory1/directory2/directory3 for this purpose.
 
 ## "compile" directive
+Note: MAGIC is not working right now.
+
 Overview:
 This feature requires multiple files in order to be specified. The way to understand this feature is to understand the underlying use case it was meant to solve. The idea is that there are many websites that contain repeating sections containing parts within them that are different.
 
@@ -146,7 +148,7 @@ Each line of a .cdf file generates one output file. The syntax for a line of the
 In other words, each line in a .cdf file consists of a filename followed by any number of .content filenames and ends with an output filename. When a line of the .cdf file is processed, the following things happen:
 
 1)The .template filename specified on each line is opened and read
-2)For each MAGIC string encountered in the .template file, the contents of a .content file is substituted for it.
+2)For each <% tag encountered in the .template file, the commands contained within it will be processed %>.
 3)An output file corresponding to the last filename listed on the line of a .cdf file is generated containing the contents of the .template file after all the MAGIC constants have been replaced.
 
 3)Generate all the .template and .content files needed in step 2.
@@ -155,7 +157,10 @@ The template.template file will have the following contents for the example:
 
 <html>
 <title>A website</title>
-<body>MAGIC</body>
+<body>
+<%
+copy page1.content
+%></body>
 </html>
 
 page1.content will have the following contents:
