@@ -17,6 +17,26 @@ $GLOBALS['output directory'] = 'output';
 $GLOBALS['source directory'] = 'src';
 $GLOBALS['directory structure file'] = $GLOBALS['source directory'] . "/" . 'directories.txt';
 
+function is_execute_directive($s){
+  $tokens = explode(" ", $s);
+
+  if (count($tokens) != 2) return false;
+  if ($tokens[0]!='execute') return false;
+
+  return true;
+}
+
+//Executes the commands inside $filename, which is the path to the command file.
+function processCommandFile($filename){
+  $lines = file($filename, FILE_IGNORE_NEW_LINES);
+
+  foreach ($lines as $line) {
+    if (trim($line) != ''){
+      exec($line);
+    }
+  }
+}
+
 //Looks for the string 'MAGIC' in $string and replaces the first occurrence
 function replace_one_magic($string, $replacement){
 	$first_occurrence_of_MAGIC = strpos($string, 'MAGIC');
@@ -304,13 +324,24 @@ function follow_script_file(){
       catch(Exception $e){
         echo ("Error processing compiled documents file.");
       }
-    }else if (is_command_directive($line)){
-      $command = substr($line,strlen("command "));
-      echo ("Running command: $command\n");
-      exec($command);
+    }else if (is_execute_directive($line)){
+      echo ("Executing scripts\n");
+      try {
+        $tokens = explode(" ", $line);
+        $command_file = $tokens[1];
+
+        echo("Running commands in $command_file.");
+        if (file_exists($command_file)){
+          processCommandFile($command_file);
+        }else{
+          // echo "Unable to open command file: $command_file.\n";
+        }
+      }catch(Exception $e){
+        echo "Error processing command file";
+      }
     }
     else{
-      echo ("Syntax error in script.txt around line $i at the part that says '$line'\n");
+      echo ("Command not recognized. Error in script.txt around line $i at the part that says '$line'\n");
     }
   }
 }

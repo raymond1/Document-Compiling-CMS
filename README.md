@@ -13,6 +13,7 @@ This is a program that generates a website. It is capable of doing the following
 1)Generating the directory structure of a website
 2)Copying files from one location to another
 3)Generating multiple files based off of a template and individual fragments of data.
+4)Executing a series of commands from the command line.
 
 # Installation
 
@@ -34,7 +35,7 @@ composer require raymond1/document-compiling-cms
 
 ## Creating a script file/Script file syntax
 
-Add the file script.txt needs to be placed in the working directory. It contains the set of instructions that will be performed by the cms.
+The file script.txt needs to be created and placed in the working directory. If it is not there, you need to add it. It contains the set of instructions that will be performed by the cms.
 
 Example file:
 generate directories
@@ -96,7 +97,7 @@ The result after processing the ```copyscript copy.txt``` command from above is 
 Similary, a directory can be copied recursively into the output directory by specifying a directory. You can use nested directories such as directory1/directory2/directory3 for this purpose.
 
 ## "compile" directive
-Note: MAGIC is not working right now.
+Note: MAGIC is probably not working right now.
 
 Overview:
 This feature requires multiple files in order to be specified. The way to understand this feature is to understand the underlying use case it was meant to solve. The idea is that there are many websites that contain repeating sections containing parts within them that are different.
@@ -181,6 +182,14 @@ output_directory/page2.html
 
 These two files were specified in the .cdf file in step 2 as the last argument on each line of the file. The contents will be determined by substituting the MAGIC string found in the template.template file with the contents specified by the second argument on each line of the .cdf file.
 
+## "execute" directive(Under development)
+The commands directive is used to specify a file to run commands from the command line.
+
+Usage:
+
+execute <command file>
+
+The format for the command file is that each line in the file will be the command that will be executed from the command line.
 
 ## Development process and Makefile
 # Makefile for copying generate_website.php

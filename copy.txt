@@ -1,1 +1,1 @@
-src/snail2.jpg output
+snail2.jpg output
