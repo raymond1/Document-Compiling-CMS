@@ -99,8 +99,7 @@ Similary, a directory can be copied recursively into the output directory by spe
 ## "compile" directive
 Note: MAGIC is probably not working right now.
 
-Overview:
-This feature requires multiple files in order to be specified. The way to understand this feature is to understand the underlying use case it was meant to solve. The idea is that there are many websites that contain repeating sections containing parts within them that are different.
+There are many websites that contain multiple pages that are the same, except for the content in a certain number of limited places.
 
 Consider, for example, the following two pages of a fictitious website:
 Page 1:
@@ -124,7 +123,8 @@ Page 2:
 </body>
 </html>
 ```
-Note that only the content between the body start and end tags is different. In order to generate this website using the document compiling cms, the following steps need to be taken.
+
+Only the content of the body tags is different. In order to generate this website using the document compiling cms, the following steps need to be taken.
 
 1)In the script.txt file, add a line like the following:
 ```
@@ -132,7 +132,7 @@ compile <filename.cdf>
 ```
 The syntax is the word "compile" followed by the name of a .cdf file. For the purposes of this mini tutorial, assume the name fo the cdf file is "filename.cdf".
 
-2)Generate the filename.cdf file. Inside that file, put on one line the name of the template file, the name of the content files, and the resultant file after substitution, all separated by spaces. Make sure your file names don't have spaces.
+2)Generate the filename.cdf file. Inside that file, each line consists of the name of a template file, followed by the name of a content file, followed by the resultant file name after substitution, all separated by spaces. Make sure your file names don't have spaces.
 
 For the current mini tutorial, the contents of filename.cdf can  be:
 ```

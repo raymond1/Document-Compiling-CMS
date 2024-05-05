@@ -1,4 +1,4 @@
 generate directories
 copyscript copy.txt
-compile example.template output/index.html
+compile example.cdf
 execute commands.txt
