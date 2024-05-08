@@ -146,11 +146,12 @@ function getFirstDirectiveLocation($s){
   return $returnObject;
 }
 
+
 //First non-empty line gives the type of the command
-//directives are: copy and print
+//Template files currently support two commands: transcribe and print
 //Takes in a directive string and returns the processed result
 //For example:
-//copy
+//transcribe
 // src/nodes.js 
 // src/parser_fragment.js 
 // src/tree.js 
@@ -159,8 +160,8 @@ function getFirstDirectiveLocation($s){
 // src/module_ending.js 
 //
 // Will produce the string created by concatenating all the listed files.
-// The syntax for the copy directive is as follows:
-// "copy" followed by a carriage return is the first line.
+// The syntax for the transcribe directive is as follows:
+// "transcribe" followed by a carriage return is the first line.
 // The first line is followed by n or more non-empty lines starting with a single space. Each non-empty line that follows the first
 // lists a file whose contents will be read and added to the output string.
 // The end result is the output string after it contains all the contents from the lines indicated by the copy directive.
