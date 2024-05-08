@@ -37,14 +37,6 @@ function processCommandFile($filename){
   }
 }
 
-//Looks for the string 'MAGIC' in $string and replaces the first occurrence
-function replace_one_magic($string, $replacement){
-	$first_occurrence_of_MAGIC = strpos($string, 'MAGIC');
-	$left_of_MAGIC = substr($string,0, $first_occurrence_of_MAGIC);
-	$right_of_MAGIC = substr($string,$first_occurrence_of_MAGIC + 5);
-	return $left_of_MAGIC . $replacement . $right_of_MAGIC;
-}
-
 //Syntax of copy.txt file is:
 //source destination
 
@@ -312,6 +304,10 @@ function follow_script_file(){
       echo ("Compiling documents:");
       try{
         $tokens = explode(" ", $line);
+        $number_of_tokens = count($tokens);
+        if ($number_of_tokens != 2){
+          throw new Exception("$number_of_tokens tokens were provided to the compile directive. Compile directive takes exactly 1 argument.");
+        }
         $template = $tokens[1];
         $outputFilename = $tokens[2];
         echo("template:$template\noutput file:$outputFilename\n");
