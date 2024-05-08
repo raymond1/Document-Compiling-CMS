@@ -33,7 +33,7 @@ composer require raymond1/document-compiling-cms
 3)Copy the file generate_website.php into the base of the folder where you are going to put the files used to create your website.
 
 
-## Creating a script file/Script file syntax
+# Creating a script file/Script file syntax
 
 The file script.txt needs to be created and placed in the working directory. If it is not there, you need to add it. It contains the set of instructions that will be performed by the cms.
 
@@ -46,7 +46,7 @@ The format of the script.txt file consists of lines of instructions, with one in
 
 "generate directories" and "copyscript" in the above example file are known as directives. The complete list of available directives and their usage are indicated below.
 
-## Script file directives
+# Script file directives
 
 ## "generate directories" directive
 
@@ -141,11 +141,12 @@ template.template page2.content output_directory/page2.html
 ```
 
 During processing,
-1)The template file specified on each line is opened and read
-2)For each <% tag encountered in the template file, the commands contained within it will be processed %>.
-3)An output file corresponding to the last filename listed on the line of a .cdf file is generated containing the contents of the template file after all the commands in the template file have been processed.
+1) The template file specified on each line is opened and read
+2) For each <% tag encountered in the template file, the commands contained within it will be processed %>. See the section on the [template file mini-language](#Template file mini-language) for more details.
 
-The template.template file will have the following contents for the example:
+3) An output file corresponding to the last filename listed on the line of a .cdf file is generated containing the contents of the template file after all the commands in the template file have been processed.
+
+The template.template file will need to have the following contents for the example:
 
 <html>
 <title>A website</title>
@@ -155,12 +156,13 @@ copy page1.content
 %></body>
 </html>
 
-page1.content will have the following contents:
+The file page1.content should have the following content:
 ```
 <h1>Page 1<h1>
 <p>Some content goes here.
 ```
-page2.content will have the following contents:
+
+Similarly, the page2.content file should have the following content:
 ```
 <h1>Page 2<h1>
 <p>Some different content for page 2 goes here.
@@ -180,13 +182,19 @@ execute <command file>
 
 The format for the command file is that each line in the file will be the command that will be executed from the command line.
 
-## Development process and Makefile
-# Makefile for copying generate_website.php
+# Template file mini-language
+
+Currently, the template files support only two commands, 'transcribe' and 'print'. Inside the template file
+
+## 'transcribe' command
+
+# Development process and Makefile
+## Makefile for copying generate_website.php
 Use the Makefile to copy your development generate_website.php into the target directory. 
 
 Usage: make copy
 
-# To bump the version number
+## To bump the version number
 
 In the document-compiling-cms folder, commit and tag your changes with the newest version.
 git add .
