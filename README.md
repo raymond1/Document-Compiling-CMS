@@ -142,7 +142,7 @@ template.template page2.content output_directory/page2.html
 
 During processing,
 1) The template file specified on each line is opened and read
-2) For each <% tag encountered in the template file, the commands contained within it will be processed %>. See the section on the [template file mini-language](#Template file mini-language) for more details.
+2) For each <% tag encountered in the template file, the commands contained within it will be processed %>. See the section on the [template file mini-language](#template-file-mini-language) for more details.
 
 3) An output file corresponding to the last filename listed on the line of a .cdf file is generated containing the contents of the template file after all the commands in the template file have been processed.
 
