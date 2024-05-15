@@ -302,7 +302,7 @@ function follow_script_file(){
       $tokens = explode(" ", $line);
       copy_files($tokens[1]);
     }else if (is_compile_directive($line)){
-      echo ("Compiling documents:");
+      echo ("Compiling documents.\n");
       try{
         $tokens = explode(" ", $line);
         $number_of_tokens = count($tokens);
@@ -319,7 +319,7 @@ function follow_script_file(){
         }
       }
       catch(Exception $e){
-        echo ("Error processing compiled documents file.");
+        echo ("Error processing compiled documents file:" . $e->getMessage() . "\n");
       }
     }else if (is_execute_directive($line)){
       echo ("Executing scripts\n");
