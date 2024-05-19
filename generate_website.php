@@ -93,32 +93,6 @@ function process_directories(){
   }
 }
 
-//Given a string $s, determine if $s is a compile directive
-//A compile directive consists of the word "compile" followed by the name of a file.
-//The filename is assumed to not contain any spaces
-function is_compile_directive($s){
-  //Syntax:
-  //compile file.compiled_documents
-
-  //Minimum acceptable string is compile followed by a space and a single letter
-  if (strlen($s) < strlen("compile") + 2){
-    return false;
-  }
-
-  if (!(substr($s,0,strlen("compile")) == "compile")){
-    return false;
-  }
-
-  //Check if there is a parameter after the compile keyword
-  $right_string = substr($s,strlen("compile"));
-  if (trim($right_string) == ""){
-    return false;
-  }
-  
-  return true;
-}
-
-
 //Takes in a string $s and finds the first occurrence of the string "<%" that is followed by 0 or more letters and then the string "%>".
 //If both the opening and closing tags exist, then 
 //This function will return an array with two values[START,LENGTH].
@@ -146,7 +120,49 @@ function getFirstDirectiveLocation($s){
   return $returnObject;
 }
 
+//copyscript <filename>
+function is_copyscript_directive($s){
+  $tokens = explode(" ", $s);
 
+  if (count($tokens) != 2) return false;
+  if ($tokens[0]!='copyscript') return false;
+  
+  return true;
+}
+
+function is_compile_directive($s){
+  $tokens = explode(" ", $s);
+  if ($tokens[0] == 'compile'){
+    return true;
+  }
+
+  return false;
+}
+
+function is_template_directive($s){
+  $tokens = explode(" ", $s);
+  if ($tokens[0] == 'template'){
+    return true;
+  }
+
+  return false;
+}
+
+//Takes in a string and returns an array with two elements
+//Element 1 is the location of the <% tag
+//Element 2 is the length from the <% tag to the end of the %> tag
+//If tag is not found, returns a -1
+function findTemplateTag($templateFileContents){
+  $openingTagLocation = strpos($templateFileContents,'<%');
+  $closingTagLocation = strpos($templateFileContents,'%>', $openingTagLocation);
+  $tagLength = $closingTagLocation - $openingTagLocation + 2;
+  $returnArray = [];
+  $returnArray[0] = $openingTagLocation;
+  $returnArray[1] = $tagLength;
+  return $returnArray;
+}
+
+//script.txt syntax: template <template filename> <output filename>
 //First non-empty line gives the type of the command
 //Template files currently support two commands: transcribe and print
 //Takes in a directive string and returns the processed result
@@ -202,7 +218,7 @@ function processTemplateDirective($s){
   return $outputString;
 }
 
-//Takes in a template file, processes its directives, and produces an output file.
+//Takes in a template file, processes it, and produces an output file.
 function processTemplate($template, $outputFilename){
   //This parsing is really fragile.
   if (!file_exists($template)){
@@ -260,26 +276,27 @@ function processTemplate($template, $outputFilename){
   fclose($outputFile);
 }
 
-//copyscript <filename>
-function is_copyscript_directive($s){
-  $tokens = explode(" ", $s);
 
-  if (count($tokens) != 2) return false;
-  if ($tokens[0]!='copyscript') return false;
-  
-  return true;
-}
+//Opens up the template file. Assumes that there is only one <%%> tag. Replaces that tag's contents with the contents from contentFile. Writes to the file
+//outputFile.
+function process_compile_directive($templateFilename,$contentFilename,$outputFilename){
+  $templateContents = file_get_contents($templateFilename);
 
-function is_command_directive($s){
-  if (substr($s,0,strlen("command ")) == "command "){
-    return true;
-  }
+  //Find the <%%> string
+  $templateTagInfo = findTemplateTag($templateContents);
+  $openingTagLocation = $templateTagInfo[0];
+  $afterClosingTagLocation = $openingTagLocation + $templateTagInfo[1];
 
-  return false;
+  $contentFileContents = file_get_contents($contentFilename);
+
+  $newContents = substr($templateContents,0, $templateTagInfo[0]) . $contentFileContents . substr($templateContents,$afterClosingTagLocation);
+  $outputFileHandle = fopen($outputFilename, 'w+');
+  fwrite($outputFileHandle, $newContents);
+  fclose($outputFileHandle);
 }
 
 //parses the script.txt file and executes the commands within it
-function follow_script_file(){
+function process_script_file(){
   $script_file_contents = @file_get_contents($GLOBALS['script file']);
   if ($script_file_contents === false){
     echo("Missing script.txt file.\n");
@@ -301,22 +318,23 @@ function follow_script_file(){
       echo ("Processing copyscript directive\n");
       $tokens = explode(" ", $line);
       copy_files($tokens[1]);
-    }else if (is_compile_directive($line)){
-      echo ("Compiling documents.\n");
+    }else if (is_template_directive($line)){
+      $tokens = explode(" ", $line);
+      
+      processTemplate($tokens[1], $tokens[2]);
+    }
+    else if (is_compile_directive($line)){
       try{
         $tokens = explode(" ", $line);
         $number_of_tokens = count($tokens);
-        if ($number_of_tokens != 2){
-          throw new Exception("$number_of_tokens tokens were provided to the compile directive. Compile directive takes exactly 1 argument.");
+        if ($number_of_tokens != 4){
+          throw new Exception("$number_of_tokens tokens were provided to the compile directive. 4 expected.");
         }
-        $template = $tokens[1];
-        $outputFilename = $tokens[2];
-        echo("template:$template\noutput file:$outputFilename\n");
-        if (file_exists($template)){
-          processTemplate($template, $outputFilename);
-        }else{
-          echo "Unable to open template: $template.\n";
-        }
+        $templateFile = $tokens[1];
+        $contentFile = $tokens[2];
+        $outputFile = $tokens[3];
+
+        process_compile_directive($templateFile,$contentFile,$outputFile);
       }
       catch(Exception $e){
         echo ("Error processing compiled documents file:" . $e->getMessage() . "\n");
@@ -343,4 +361,5 @@ function follow_script_file(){
   }
 }
 
-follow_script_file();
+
+process_script_file();

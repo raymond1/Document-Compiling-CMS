@@ -1,4 +1,4 @@
-# Usage
+# Usage Overview
 This is a console run php script and is activated using the following command:
 
 php generate_website.php <optional script_file>
@@ -10,10 +10,11 @@ See below for information on how to configure the Document Compiling CMS (abbrev
 # Capabilities
 This is a program that generates a website. It is capable of doing the following things:
 
-1)Generating the directory structure of a website
-2)Copying files from one location to another
-3)Generating multiple files based off of a template and individual fragments of data.
-4)Executing a series of commands from the command line.
+1. Generating the directory structure of a website
+2. Copying files from one location to another
+3. Generating a file by specifying a template, a variable area of text and what that area of text should be filled with.
+4. Generating a file by gluing together different fragments of text.
+5. Executing a series of commands from the command line.
 
 # Installation
 
@@ -57,8 +58,8 @@ In the script.txt file, add a line that contains only the following text:
 generate directories
 
 When the php generate_website.php script is run, the generate directories directive will do the following:
-1)open and read the file directories.txt. You will need to create this file if it doesn't exist.
-2)generate the directories listed in the directories.txt file.
+1. open and read the file directories.txt. You will need to create this file if it doesn't exist.
+2. generate the directories listed in the directories.txt file.
 
 The syntax for specifying the directories to be created is as follows: each line contains a series of directory names separated by slashes. These directories will be created when the "generate directories" directive is processed.
 
@@ -97,81 +98,53 @@ The result after processing the ```copyscript copy.txt``` command from above is 
 Similary, a directory can be copied recursively into the output directory by specifying a directory. You can use nested directories such as directory1/directory2/directory3 for this purpose.
 
 ## "compile" directive
-There are many websites that contain multiple pages that are the same, except for the content in a certain number of limited places.
+There are many websites that contain multiple pages that are very similar to each other, where, except for the content in a certain number of limited places, the pages are the same. To generate these files, the 'compile' directive exists to allow people to specify the template, the content, and the output file inside the script.txt file.
 
-Consider, for example, the following two pages of a fictitious website:
-Page 1:
+To use the 'compile directive', first modify the script.txt file. For each web page that shares the same structure, add a line with the following syntax:
+
 ```
-<html>
-<title>A website</title>
-<body>
-<h1>Page 1<h1>
-<p>Some content goes here.
-</body>
-</html>
+compile <template file> <content file> <output file>
 ```
 
-Page 2:
+The output file will be produced by the document compiling cms by replacing the contents between and including the opening and end <% %> tag in the template file with the contents of the content file. The template file is assumed to have one <% %> tag in it, that is, the string <% followed by the string %>. If these two string sequences are not detected, the compile directive will not work.
+
+## "template" directive
+The template directive instructs the document compiling cms to read in a template file and process its instructions. Syntax:
+
 ```
-<html>
-<title>A website</title>
-<body>
-<h1>Page 2<h1>
-<p>Some different content for page 2 goes here.
-</body>
-</html>
+template <template filename> <output filename>
 ```
 
-Only the content of the body tags is different. In order to generate this website using the document compiling cms, the following steps need to be taken:
+The template file's contents will be copied to the output filename, with any <% %> tags processed along the way. Within the <% %> tags, certain commands can be used, as explained in the template file mini-language section below.
 
-1) In the script.txt file, add a line like the following:
-```
-compile <target filename>
-```
-The syntax is the word "compile" followed by the name of a file.
+### Template file mini-language
 
-2)Generate the target file. Each line in the target file consists of the name of a template file, followed by the name of a content file, followed by the resultant file name after substitution, all separated by spaces. Make sure your file names don't have spaces.
+Currently, the template files support only two commands, 'transcribe' and 'print'.
 
-For the current mini tutorial, the contents of filename.cdf can  be:
-```
-template.template page1.content output_directory/page1.html
-template.template page2.content output_directory/page2.html
-...
-<template filename> <content fragment filename> <output filename>
-```
+#### 'transcribe' command
+Example:
 
-During processing,
-1) The template file specified on each line is opened and read
-2) For each <% tag encountered in the template file, the commands contained within it will be processed %>. See the section on the [template file mini-language](#template-file-mini-language) for more details.
-
-3) An output file corresponding to the last filename listed on the line of a .cdf file is generated containing the contents of the template file after all the commands in the template file have been processed.
-
-The template.template file will need to have the following contents for the example:
-
-<html>
-<title>A website</title>
-<body>
 <%
-copy page1.content
-%></body>
-</html>
 
-The file page1.content should have the following content:
-```
-<h1>Page 1<h1>
-<p>Some content goes here.
-```
+transcribe
+ file_1
+ file_2
 
-Similarly, the page2.content file should have the following content:
-```
-<h1>Page 2<h1>
-<p>Some different content for page 2 goes here.
-```
+%>
 
-4)Run php generate_website.php
-The following files will be generated:
-output_directory/page1.html
-output_directory/page2.html
+Transcribe will print the contents of the files listed under the transcribe node to the output.
+
+#### 'print' command
+
+Example:
+
+<%
+
+print
+ string
+%>
+
+print will print the strings listed under the print node to the output. The purpose of the print command is to insert strings such as '<%', which might cause problems, or spaces or newline characters in between two transcribe commands.
 
 ## "execute" directive
 The commands directive is used to specify a file to run commands from the command line.
@@ -182,11 +155,6 @@ execute <command file>
 
 The format for the command file is that each line in the file will be the command that will be executed from the command line.
 
-# Template file mini-language
-
-Currently, the template files support only two commands, 'transcribe' and 'print'. Inside the template file
-
-## 'transcribe' command
 
 # Development process and Makefile
 ## Makefile for copying generate_website.php
