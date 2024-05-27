@@ -226,15 +226,7 @@ function processTemplate($template, $outputFilename){
   }
 
   //Everything not enclosed in <% %> will be printed
-  //Within the <% %> tags, directives can be given. Currently, there are only three directives, "join", "copy", "print"
-  //Syntax:
-  //join(carriage return)
-  //(spaces and tabs)filepath 1(carriage return)
-  //(spaces and tabs>filepath 2(carriage return)
-  //(carriage return)
-  //
-
-  //copy(space)<filepath>(end of line)
+  //Within the <% %> tags, directives can be given.
 
   //All paths are relative to the directory where the script was run
   $templateContents = @file_get_contents($template);
